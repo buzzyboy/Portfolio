@@ -11,6 +11,29 @@ var drawableCanvasSourceFiles = [
 
 //</editor-fold>
 
+//<editor-fold name="Helper Methods">
+
+function combineArrays () {
+	var array = [];
+	for (var i = 0; i < arguments.length; i++)
+	{
+		var argument = arguments[i];
+		if (Array.isArray(argument))
+		{
+			argument.forEach(function (item) {
+				array.push(item);
+			});
+		}
+		else
+		{
+			array.push(argument);
+		}
+	}
+	return array;
+}
+
+//</editor-fold>
+
 
 module.exports = function(grunt) {
 
@@ -48,6 +71,14 @@ module.exports = function(grunt) {
 				src: drawableCanvasSourceFiles,
 				dest: "src/DrawableCanvas/build/DrawableCanvas.combined.js"
 			}
+		},
+		jsdoc: {
+			drawableCanvas: {
+				src: combineArrays(["src/DrawableCanvas/jsdoc"], drawableCanvasSourceFiles),
+				options: {
+					destination: "src/DrawableCanvas/docs"
+				}
+			}
 		}
 	});
 
@@ -55,6 +86,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks("grunt-contrib-concat");
 	grunt.loadNpmTasks("grunt-contrib-less");
+	grunt.loadNpmTasks("grunt-jsdoc");
 
 	grunt.registerTask('default', ['bower', 'uglify']);
 

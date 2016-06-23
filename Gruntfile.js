@@ -3,7 +3,9 @@
 //<editor-fold name="Drawable Canvas">
 
 var drawableCanvasSourceFiles = [
-	"src/DrawableCanvas/src/**/*"
+	"src/DrawableCanvas/src/DrawableCanvas.js",
+	"src/DrawableCanvas/src/InputService/*/js",
+	"src/DrawableCanvas/src/events/*.js"
 ];
 
 //</editor-fold>

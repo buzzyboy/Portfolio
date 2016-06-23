@@ -3,9 +3,10 @@
  */
 
 /**
+ * @property {String} rendered Called when the canvas and all of its drawables are rendered
+ * @enum {String}
  * @module DrawableCanvas.Events
- * @type {{rendered: string}}
- * @enum
+ * @readonly
  */
 DrawableCanvas.Events = {
 	rendered: "rendered"

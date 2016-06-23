@@ -2,6 +2,9 @@
  * Created by cody on 6/22/16.
  */
 
+/**
+ * @module DrawableCanvas
+ */
 var DrawableCanvas;
 
 (function () {
@@ -10,6 +13,7 @@ var DrawableCanvas;
 	/**
 	 * @param {jQuery} $canvasElement
 	 * @param {DrawableCanvas.defaults} optionsIn
+	 * @module DrawableCanvas
 	 * @constructor
 	 */
 	DrawableCanvas = function ($canvasElement, optionsIn) {
@@ -20,6 +24,7 @@ var DrawableCanvas;
 		self.$canvas = $canvasElement;
 		/**@type {DrawableCanvas.EventEmitter}*/
 		self._eventEmitter = null;
+		/**@type {Array<String>}*/
 		self._mutedLayerIds = [];
 		/**@type {CanvasRenderingContext2D}*/
 		self._context = null;
@@ -134,15 +139,10 @@ var DrawableCanvas;
 	DrawableCanvas.isLayerIdMuted = function (layerId) {
 		return this._mutedLayerIds.indexOf(layerId) >= 0;
 	};
-	
+
 	/**
-	 * @param {TabeebAnnotation} annotation
-	 * @returns {boolean}
+	 * @param {String} layerId
 	 */
-	DrawableCanvas.isAnnotationMuted = function (annotation) {
-		return this._mutedLayerIds.indexOf(annotation.layerId) >= 0;
-	};
-	
 	DrawableCanvas.addMutedLayerId = function (layerId) {
 		if (this._mutedLayerIds.indexOf(layerId) >= 0)
 		{
@@ -153,7 +153,10 @@ var DrawableCanvas;
 			this._mutedLayerIds.push(layerId);
 		}
 	};
-	
+
+	/**
+	 * @param {String} layerId
+	 */
 	DrawableCanvas.removeMutedLayerId = function (layerId) {
 		var index = this._mutedLayerIds.indexOf(layerId);
 		if (index >= 0)
@@ -165,18 +168,30 @@ var DrawableCanvas;
 	//</editor-fold>
 	
 	//<editor-fold name="Sizing and Scaling">
-	
+
+	/**
+	 * @param {Number} x
+	 * @param {Number} y
+	 */
 	DrawableCanvas.prototype.setPan = function (x, y) {
 		this._pan.x = x;
 		this._pan.y = y;
 		console.log("Setting Pan", this._pan.x, this._pan.y);
 		this.render();
 	};
-	
+
+	/**
+	 * @param {Number} x
+	 * @param {Number} y
+	 */
 	DrawableCanvas.prototype.translatePan = function (x, y) {
 		this.setPan(this._pan.x + x ,this._pan.y + y);
 	};
-	
+
+	/**
+	 * @param {Number} scalePercent
+	 * @returns {Number}
+	 */
 	DrawableCanvas.prototype.calculatorScaleFactorWithPercent = function (scalePercent) {
 		var basedOnWidth = this.isZoomPercentageBasedOnWidth();
 		var viewport = this.getViewport(1);
@@ -209,7 +224,11 @@ var DrawableCanvas;
 		this.$canvas[0].height = Math.min(maxSize.height, height);
 		this.centerCanvasInContainer();
 	};
-	
+
+	/**
+	 * @param {Number} scalePercent
+	 * @returns {{width: number, height: number}}
+	 */
 	DrawableCanvas.prototype.getViewport = function (scalePercent) {
 		return {
 			width: this.$canvas.parent().width() * scalePercent,
@@ -227,7 +246,10 @@ var DrawableCanvas;
 		this.setScaleFactor(this.getScaleFactor());
 		this.resize();
 	};
-	
+
+	/**
+	 * @returns {boolean}
+	 */
 	DrawableCanvas.prototype.isZoomPercentageBasedOnWidth = function () {
 		var viewport = this.getViewport(1.0);
 		var scaleFactorToFitWidth = viewport.width / this.mediaSize.width;
@@ -248,7 +270,7 @@ var DrawableCanvas;
 	};
 	
 	/**
-	 * @param {Number} [scaleFactor]
+	 * @param {Number} scaleFactor
 	 */
 	DrawableCanvas.prototype.setScaleFactor = function (scaleFactor) {
 		scaleFactor = parseFloat(Math.min(this._options.maxScaleFactor, Math.max(this._options.minScaleFactor, scaleFactor)).toFixed(2));
@@ -263,7 +285,7 @@ var DrawableCanvas;
 	};
 	
 	/**
-	 * @returns {Number|*}
+	 * @returns {Number}
 	 */
 	DrawableCanvas.prototype.getScaleFactor = function () {
 		if (this._options.scaleIsPercentBased) {
@@ -274,21 +296,7 @@ var DrawableCanvas;
 			return this._scaleFactor;
 		}
 	};
-	
-	/**
-	 * @param {Number} [scaleFactor]
-	 */
-	DrawableCanvas.prototype.coordinateScale = function (scaleFactor) {
-		if (scaleFactor)
-		{
-			this._coordinateScale = scaleFactor;
-		}
-		else
-		{
-			return this._coordinateScale;
-		}
-	};
-	
+
 	/**
 	 * To be called when the window or parent container size changes
 	 */
@@ -305,11 +313,17 @@ var DrawableCanvas;
 	//</editor-fold>
 	
 	//<editor-fold name="Rendering">
-	
+
+	/**
+	 * @param {Array<DrawableCanvas.Drawable>} drawables
+	 */
 	DrawableCanvas.prototype.setDrawables = function (drawables) {
 		this._drawables = drawables;
 	};
-	
+
+	/**
+	 * Renders all the current drawables
+	 */
 	DrawableCanvas.prototype.render = function () {
 		var $canvas = this.$canvas;
 		var context = this._context;
@@ -339,31 +353,5 @@ var DrawableCanvas;
 	//</editor-fold>
 	
 	//</editor-fold>
-	
-	//<editor-fold name="Events">
-	
-	DrawableCanvas.Events = {
-		rendered: "rendered"
-	};
-	
-	DrawableCanvas.EventEmitter = function ($triggerElement) {
-		//<editor-fold name="Variables">
-		
-		var self = this;
-		self.$triggerElement = $triggerElement;
-		
-		//</editor-fold>
-	};
-	
-	DrawableCanvas.EventEmitter.prototype = {
-		emitEvent: function (event) {
-			this.$triggerElement.trigger(event);
-		},
-		emitRenderedEvent: function () {
-			this.emitEvent(DrawableCanvas.Events.rendered);
-		}
-	};
-	
-	//</editor-fold>
-	
+
 })();

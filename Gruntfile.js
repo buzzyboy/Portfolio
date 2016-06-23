@@ -1,3 +1,16 @@
+//<editor-fold name="Variables">
+
+//<editor-fold name="Drawable Canvas">
+
+var drawableCanvasSourceFiles = [
+	"src/DrawableCanvas/src/**/*"
+];
+
+//</editor-fold>
+
+
+//</editor-fold>
+
 
 module.exports = function(grunt) {
 
@@ -29,11 +42,18 @@ module.exports = function(grunt) {
 			files: {
 				"src/css/bootstrap.css": "bower_components/bootstrap-less/bootstrap.less"
 			}
+		},
+		concat: {
+			drawableCanvas: {
+				src: drawableCanvasSourceFiles,
+				dest: "src/DrawableCanvas/build/DrawableCanvas.combined.js"
+			}
 		}
 	});
 
-	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks("grunt-bower-task");
+	grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks("grunt-contrib-concat");
 	grunt.loadNpmTasks("grunt-contrib-less");
 
 	grunt.registerTask('default', ['bower', 'uglify']);

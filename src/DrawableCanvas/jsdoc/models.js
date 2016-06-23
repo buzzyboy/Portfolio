@@ -3,13 +3,14 @@
  */
 
 /**
- * @constructor
+ * Anything that you want to be drawn in DrawableCanvas must implement all these methods
+ * @interface
  * @property {Boolean} highlighted
  * @property {Number} x
  * @property {Number} y
  */
-DrawableCanvas.Drawable = function () {};
+DrawableCanvas.IDrawable = function () {};
 /**
  * @param {CanvasRenderingContext2D} context
  */
-DrawableCanvas.Drawable.prototype.draw = function (context) {};
+DrawableCanvas.IDrawable.prototype.draw = function (context) {};

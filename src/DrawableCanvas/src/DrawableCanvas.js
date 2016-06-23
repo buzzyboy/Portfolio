@@ -34,7 +34,7 @@ var DrawableCanvas;
 		self._options = $.extend(DrawableCanvas.defaults, optionsIn);
 		/**@type {DrawableCanvas.InputService}*/
 		self._inputService = null;
-		/**@type {Array<DrawableCanvas.Drawable>}*/
+		/**@type {Array<DrawableCanvas.IDrawable>}*/
 		self._drawables = [];
 		self._pan = {
 			x: 0,
@@ -315,7 +315,7 @@ var DrawableCanvas;
 	//<editor-fold name="Rendering">
 
 	/**
-	 * @param {Array<DrawableCanvas.Drawable>} drawables
+	 * @param {Array<DrawableCanvas.IDrawable>} drawables
 	 */
 	DrawableCanvas.prototype.setDrawables = function (drawables) {
 		this._drawables = drawables;

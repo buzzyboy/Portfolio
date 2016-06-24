@@ -14,3 +14,13 @@ DrawableCanvas.IDrawable = function () {};
  * @param {CanvasRenderingContext2D} context
  */
 DrawableCanvas.IDrawable.prototype.draw = function (context) {};
+
+/**
+ * @interface
+ */
+DrawableCanvas.ICollidable = function () {};
+
+/**
+ * @param {{x:Number, y:Number, width:Number, height:Number}} rect
+ */
+DrawableCanvas.ICollidable.prototype.collidesWithRectangle = function (rect) {};

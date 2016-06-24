@@ -363,8 +363,10 @@ var DrawableCanvas;
 		context.scale(scaleFactor, scaleFactor);
 
 		this._drawables.forEach(function (drawable) {
-			//context.translate(drawable.x, drawable.y);
+			context.save();
+			context.translate(drawable.x, drawable.y);
 			drawable.draw(context);
+			context.restore();
 		});
 		context.restore();
 

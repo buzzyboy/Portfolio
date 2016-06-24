@@ -6,7 +6,11 @@
 
     <script src="../../../bower_components/jquery/dist/jquery.js"></script>
 
+    <script src="../src/extensions/Function.js"></script>
     <script src="../src/DrawableCanvas.js"></script>
+    <script src="../src/drawables/Drawable.js"></script>
+    <script src="../src/drawables/ShapeCollisions.js"></script>
+    <script src="../src/drawables/Rectangle.js"></script>
     <script src="../src/events/EventEmitter.js"></script>
     <script src="../src/events/EventEnums.js"></script>
     <script src="../src/InputService/InputService.js"></script>
@@ -62,26 +66,7 @@
             ctx.closePath();
         };
     })();
-    var myDrawable2 = new (function () {
-        /**
-         * @param {CanvasRenderingContext2D} ctx
-         */
-        this.draw = function (ctx) {
-            ctx.beginPath();
-            ctx.strokeStyle = "blue";
-            ctx.moveTo(5, 5);
-            ctx.lineTo(245, 5);
-            ctx.lineTo(245, 245);
-            ctx.lineTo(5, 245);
-            ctx.lineTo(245, 5);
-            ctx.moveTo(5, 5);
-            ctx.lineTo(245, 245);
-            ctx.lineTo(5, 245);
-            ctx.lineTo(5, 5);
-            ctx.stroke();
-            ctx.closePath();
-        };
-    })();
+    var myDrawable2 = new DrawableCanvas.Rectangle(5, 5, 240, 240, "blue");
 
     var $canvasElement = $("#canvasElement");
     var drawableCanvas = new DrawableCanvas($canvasElement, options);

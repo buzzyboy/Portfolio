@@ -7,6 +7,8 @@
     <script src="../../../bower_components/jquery/dist/jquery.js"></script>
 
     <script src="../src/DrawableCanvas.js"></script>
+    <script src="../src/events/EventEmitter.js"></script>
+    <script src="../src/events/EventEnums.js"></script>
     <script src="../src/InputService/InputService.js"></script>
 
     <style type="text/css">
@@ -29,29 +31,61 @@
             border: 1px solid pink;
             position: absolute;
         }
+
+        #debugMsg {
+            position: fixed;
+            left: 0;
+            top: 0;
+            min-height: 1em;
+            min-width: 1em;
+            background: blue;
+            color: white;
+            padding: 5px;
+        }
     </style>
 </head>
 <body>
 
 <div id="container">
     <canvas id="canvasElement"></canvas>
+
 </div>
 
 <script>
-    var options = {
-
-    };
+    var options = {};
 
     /**@type {DrawableCanvas.IDrawable}*/
     var myDrawable = new (function () {
         this.draw = function (ctx) {
-            ctx.fillRect(0,0, 10, 10);
+            ctx.beginPath();
+            ctx.fillRect(0, 0, 10, 10);
+            ctx.closePath();
+        };
+    })();
+    var myDrawable2 = new (function () {
+        /**
+         * @param {CanvasRenderingContext2D} ctx
+         */
+        this.draw = function (ctx) {
+            ctx.beginPath();
+            ctx.strokeStyle = "blue";
+            ctx.moveTo(5, 5);
+            ctx.lineTo(245, 5);
+            ctx.lineTo(245, 245);
+            ctx.lineTo(5, 245);
+            ctx.lineTo(245, 5);
+            ctx.moveTo(5, 5);
+            ctx.lineTo(245, 245);
+            ctx.lineTo(5, 245);
+            ctx.lineTo(5, 5);
+            ctx.stroke();
+            ctx.closePath();
         };
     })();
 
     var $canvasElement = $("#canvasElement");
     var drawableCanvas = new DrawableCanvas($canvasElement, options);
-    drawableCanvas.setDrawables([myDrawable]);
+    drawableCanvas.setDrawables([myDrawable, myDrawable2]);
     drawableCanvas.setMediaSize(250, 250);
 </script>
 

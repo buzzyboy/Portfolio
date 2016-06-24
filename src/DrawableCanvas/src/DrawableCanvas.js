@@ -46,7 +46,7 @@ var DrawableCanvas;
 		};
 		
 		var isPanning = false;
-		var lastMousePosition = {x:0, y:0};
+		var lastMousePosition = {x: 0, y: 0};
 		
 		//</editor-fold>
 		
@@ -57,7 +57,7 @@ var DrawableCanvas;
 		function init () {
 			self._eventEmitter = new DrawableCanvas.EventEmitter($(this));
 			self._context = self.$canvas[0].getContext("2d");
-			self._inputService = new DrawableCanvas.InputService($canvasElement);
+			self._inputService = new DrawableCanvas.InputService($canvasElement.parent());
 			bindEvents();
 		}
 		
@@ -85,16 +85,16 @@ var DrawableCanvas;
 		}
 		
 		function onInputService_PointerMove (event) {
-			if (isPanning === true) {
-				var translateX = event.point.x - lastMousePosition.x;
-				var translateY = event.point.y - lastMousePosition.y;
+			if (isPanning === true)
+			{
+				var translateX = lastMousePosition.x - event.point.x;
+				var translateY = lastMousePosition.y - event.point.y;
 				self.translatePan(translateX, translateY);
 			}
 			lastMousePosition = event.point;
 		}
 		
 		function onInputService_PointerUp (event) {
-			console.log("Pointer up");
 			isPanning = false;
 			lastMousePosition = event.point;
 		}
@@ -176,7 +176,6 @@ var DrawableCanvas;
 	DrawableCanvas.prototype.setPan = function (x, y) {
 		this._pan.x = x;
 		this._pan.y = y;
-		console.log("Setting Pan", this._pan.x, this._pan.y);
 		this.render();
 	};
 
@@ -185,7 +184,7 @@ var DrawableCanvas;
 	 * @param {Number} y
 	 */
 	DrawableCanvas.prototype.translatePan = function (x, y) {
-		this.setPan(this._pan.x + x ,this._pan.y + y);
+		this.setPan(this._pan.x + x, this._pan.y + y);
 	};
 
 	/**
@@ -194,7 +193,7 @@ var DrawableCanvas;
 	 */
 	DrawableCanvas.prototype.calculatorScaleFactorWithPercent = function (scalePercent) {
 		var basedOnWidth = this.isZoomPercentageBasedOnWidth();
-		var viewport = this.getViewport(1);
+		var viewport = this.getViewportByPercent(1);
 		var property = basedOnWidth ? "width" : "height";
 		var nonScaledSize = this.mediaSize[property];
 		var desiredSize = viewport[property] * scalePercent;
@@ -229,13 +228,27 @@ var DrawableCanvas;
 	 * @param {Number} scalePercent
 	 * @returns {{width: number, height: number}}
 	 */
-	DrawableCanvas.prototype.getViewport = function (scalePercent) {
+	DrawableCanvas.prototype.getViewportByPercent = function (scalePercent) {
+		var $container = this.$canvas.parent();
+		var containerWidth = $container.innerWidth();
+		var containerHeight = $container.innerHeight();
 		return {
-			width: this.$canvas.parent().width() * scalePercent,
-			height: this.$canvas.parent().height() * scalePercent
+			width: containerWidth * scalePercent,
+			height: containerHeight * scalePercent
 		};
 	};
-	
+
+	/**
+	 * @param {Number} scaleFactor
+	 * @returns {{width: number, height: number}}
+	 */
+	DrawableCanvas.prototype.getViewport = function (scaleFactor) {
+		return {
+			width: this.mediaSize.width * scaleFactor,
+			height: this.mediaSize.height * scaleFactor
+		};
+	};
+
 	/**
 	 * @param {Number} width
 	 * @param {Number} height
@@ -251,12 +264,11 @@ var DrawableCanvas;
 	 * @returns {boolean}
 	 */
 	DrawableCanvas.prototype.isZoomPercentageBasedOnWidth = function () {
-		var viewport = this.getViewport(1.0);
+		var viewport = this.getViewportByPercent(1.0);
 		var scaleFactorToFitWidth = viewport.width / this.mediaSize.width;
 		var isWidthBased = this.mediaSize.height * scaleFactorToFitWidth < viewport.height;
 		return isWidthBased;
 	};
-	
 	
 	/**
 	 * Centers the canvas in its parent container
@@ -277,7 +289,6 @@ var DrawableCanvas;
 		if (this._options.scaleIsPercentBased)
 		{
 			this._scalePercent = scaleFactor;
-			console.log("Scale", this._scalePercent*100 + "%");
 			scaleFactor = this.calculatorScaleFactorWithPercent(scaleFactor);
 		}
 		this._scaleFactor = scaleFactor;
@@ -288,7 +299,8 @@ var DrawableCanvas;
 	 * @returns {Number}
 	 */
 	DrawableCanvas.prototype.getScaleFactor = function () {
-		if (this._options.scaleIsPercentBased) {
+		if (this._options.scaleIsPercentBased)
+		{
 			return this._scalePercent;
 		}
 		else
@@ -306,7 +318,6 @@ var DrawableCanvas;
 			this._scaleFactor = this.calculatorScaleFactorWithPercent(this._scalePercent);
 		}
 		this.setCanvasSize(this.mediaSize.width * this._scaleFactor, this.mediaSize.height * this._scaleFactor);
-		this.centerCanvasInContainer();
 		this.render();
 	};
 	
@@ -322,23 +333,33 @@ var DrawableCanvas;
 	};
 
 	/**
+	 * @returns {{x: number, y: number}}
+	 */
+	DrawableCanvas.prototype.getMaxPan = function () {
+		var containerSize = this.getViewportByPercent(1.0);
+		var displayedCanvasSize = this.getViewport(this._scaleFactor);
+		var maxPan = {
+			x: Math.max(0, displayedCanvasSize.width - containerSize.width),
+			y: Math.max(0, displayedCanvasSize.height - containerSize.height)
+		};
+		return maxPan;
+	};
+
+	/**
 	 * Renders all the current drawables
 	 */
 	DrawableCanvas.prototype.render = function () {
 		var $canvas = this.$canvas;
 		var context = this._context;
 		var scaleFactor = this._scaleFactor;
-		var drawnWidth = parseInt(this.mediaSize.width * scaleFactor);
-		var drawnHeight = parseInt(this.mediaSize.height * scaleFactor);
-		var maxPanX = drawnWidth - $canvas.width();
-		var maxPanY = drawnHeight - $canvas.innerHeight();
+		var maxPan = this.getMaxPan();
 
-		var panX = Math.max(0, Math.min(maxPanX, this._pan.x));
-		var panY = Math.max(0, Math.min(maxPanY, this._pan.y));
+		this._pan.x = Math.max(0, Math.min(maxPan.x, this._pan.x));
+		this._pan.y = Math.max(0, Math.min(maxPan.y, this._pan.y));
 
-		context.clearRect(0, 0, $canvas[0].width, $canvas[0].height);
 		context.save();
-		context.translate(panX, panY);
+		context.translate(-this._pan.x, -this._pan.y);
+		context.clearRect(0, 0, $canvas[0].width + maxPan.x, $canvas[0].height + maxPan.y);
 		context.scale(scaleFactor, scaleFactor);
 
 		this._drawables.forEach(function (drawable) {

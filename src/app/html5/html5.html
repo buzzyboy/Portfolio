@@ -2,6 +2,18 @@
 
 <div ng-controller="HTML5Controller as vm" class="container">
 
-    HTML5 showcase!
+    <div class="panel panel-primary" ng-controller="DrawableCanvasController as dc">
+        <div class="panel-heading">
+            Canvas
+        </div>
+        <div class="panel-body" style="min-height: 50vh; position: relative;">
+            <canvas
+                    drawable-canvas
+                    width="250"
+                    height="250"
+                    style="border: 1px solid; position: absolute;"
+                    on-ready="dc.onDrawableCanvasReady"></canvas>
+        </div>
+    </div>
 
 </div>

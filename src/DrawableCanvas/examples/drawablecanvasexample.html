@@ -49,19 +49,20 @@
     var options = {};
 
     /**@type {DrawableCanvas.IDrawable}*/
-    var myDrawable = new (function () {
-        this.draw = function (ctx) {
-            ctx.beginPath();
-            ctx.fillRect(0, 0, 10, 10);
-            ctx.closePath();
-        };
-    })();
+    var myDrawable = new DrawableCanvas.Rectangle(0, 0, 10, 10, "black");
+    myDrawable.filled = true;
     var myDrawable2 = new DrawableCanvas.Rectangle(5, 5, 240, 240, "blue");
 
     var $canvasElement = $("#canvasElement");
     var drawableCanvas = new DrawableCanvas($canvasElement, options);
     drawableCanvas.setDrawables([myDrawable, myDrawable2]);
     drawableCanvas.setMediaSize(250, 250);
+
+    $(function () {
+        $(window).on("resize", function () {
+            drawableCanvas.resize();
+        });
+    });
 </script>
 
 </body>

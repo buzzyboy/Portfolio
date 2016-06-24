@@ -30,5 +30,17 @@
 				}
 			}
 		});
+		$stateProvider.state({
+			name: "html5",
+			url: "/html5",
+			views: {
+				"main@": {
+					templateUrl: "app/home/home.html"
+				},
+				"navbar@html5": {
+					templateUrl: "app/navbar/navbar.html"
+				}
+			}
+		});
 	}
 })();

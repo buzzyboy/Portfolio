@@ -77,7 +77,6 @@ var DrawableCanvas;
 		 * @param {{x:Number, y:Number}} point
 		 */
 		function convertInputServicePointToCanvasPoint (point) {
-			var canvasOffset = $canvasElement.position();
 			return {
 				x: ((point.x + self._pan.x) / self._scaleFactor),
 				y: ((point.y + self._pan.y) / self._scaleFactor)
@@ -90,9 +89,6 @@ var DrawableCanvas;
 			{
 				isPanning = true;
 			}
-
-			var str = "test";
-			str.indexOf();
 			lastMousePosition = point;
 		}
 		
@@ -159,13 +155,17 @@ var DrawableCanvas;
 				width: 10,
 				height: 10
 			};
-			self._drawables.forEach(function (drawable) {
-				if (drawable["collidesWithRectangle"]) {
-					if (drawable["collidesWithRectangle"](collisionRectangle)) {
-						drawables.push(drawable);
+			for (var i = 0; i < self._drawables.length; i++)
+			{
+				if (self._drawables[i]["collidesWithRectangle"]) {
+					/**@type {DrawableCanvas.ICollidable}}*/
+					var collidable = self._drawables[i];
+					if (collidable["collidesWithRectangle"](collisionRectangle)) {
+						drawables.push(collidable);
 					}
 				}
-			});
+
+			}
 			return drawables;
 		}
 

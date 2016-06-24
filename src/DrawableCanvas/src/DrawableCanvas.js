@@ -77,13 +77,15 @@ var DrawableCanvas;
 		 * @param {{x:Number, y:Number}} point
 		 */
 		function convertInputServicePointToCanvasPoint (point) {
+			var canvasOffset = $canvasElement.position();
 			return {
-				x: point.x + parseInt($canvasElement[0].style.left),
-				y: point.y + parseInt($canvasElement[0].style.top)
+				x: ((point.x + self._pan.x) / self._scaleFactor),
+				y: ((point.y + self._pan.y) / self._scaleFactor)
 			};
 		}
 		
 		function onInputService_PointerDown (event) {
+			var point = convertInputServicePointToCanvasPoint(event.point);
 			if (self._scalePercent > 1.0)
 			{
 				isPanning = true;
@@ -91,7 +93,7 @@ var DrawableCanvas;
 
 			var str = "test";
 			str.indexOf();
-			lastMousePosition = event.point;
+			lastMousePosition = point;
 		}
 		
 		function onInputService_PointerMove (event) {
@@ -101,6 +103,22 @@ var DrawableCanvas;
 				var translateX = lastMousePosition.x - point.x;
 				var translateY = lastMousePosition.y - point.y;
 				self.translatePan(translateX, translateY);
+			}
+			else {
+				var needsRedraw = false;
+				var collidingDrawables = getDrawablesCollidingWithPoint(point);
+				self._drawables.filter(function (d) { return d.highlighted === true; }).forEach(function (drawable) {
+					drawable.highlighted = false;
+					needsRedraw = true;
+				});
+				collidingDrawables.forEach(function (drawable) {
+					drawable.highlighted = true;
+					needsRedraw = true;
+				});
+
+				if (needsRedraw === true) {
+					self.render();
+				}
 			}
 			lastMousePosition = point;
 		}
@@ -126,7 +144,33 @@ var DrawableCanvas;
 		}
 		
 		//</editor-fold>
-		
+
+		//<editor-fold name="Collisions">
+
+		/**
+		 * @param {{x:Number, y:Number}} point
+		 */
+		function getDrawablesCollidingWithPoint (point) {
+			/**@type {Array<DrawableCanvas.ICollidable>}*/
+			var drawables = [];
+			var collisionRectangle = {
+				x: point.x - 5,
+				y: point.y - 5,
+				width: 10,
+				height: 10
+			};
+			self._drawables.forEach(function (drawable) {
+				if (drawable["collidesWithRectangle"]) {
+					if (drawable["collidesWithRectangle"](collisionRectangle)) {
+						drawables.push(drawable);
+					}
+				}
+			});
+			return drawables;
+		}
+
+		//</editor-fold>
+
 	};
 	
 	//<editor-fold name="Options">

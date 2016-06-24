@@ -84,25 +84,24 @@ var DrawableCanvas;
 		}
 		
 		function onInputService_PointerDown (event) {
-			var point = convertInputServicePointToCanvasPoint(event.point);
 			if (self._scalePercent > 1.0)
 			{
 				isPanning = true;
 			}
-			lastMousePosition = point;
+			lastMousePosition = event.point;
 		}
 		
 		function onInputService_PointerMove (event) {
-			var point = convertInputServicePointToCanvasPoint(event.point);
 			if (isPanning === true)
 			{
-				var translateX = lastMousePosition.x - point.x;
-				var translateY = lastMousePosition.y - point.y;
+				var translateX = (lastMousePosition.x - event.point.x);
+				var translateY = lastMousePosition.y - event.point.y;
 				self.translatePan(translateX, translateY);
 			}
 			else {
+				var collisionPoint = convertInputServicePointToCanvasPoint(event.point);
 				var needsRedraw = false;
-				var collidingDrawables = getDrawablesCollidingWithPoint(point);
+				var collidingDrawables = getDrawablesCollidingWithPoint(collisionPoint);
 				self._drawables.filter(function (d) { return d.highlighted === true; }).forEach(function (drawable) {
 					drawable.highlighted = false;
 					needsRedraw = true;
@@ -116,7 +115,7 @@ var DrawableCanvas;
 					self.render();
 				}
 			}
-			lastMousePosition = point;
+			lastMousePosition = event.point;
 		}
 		
 		function onInputService_PointerUp (event) {

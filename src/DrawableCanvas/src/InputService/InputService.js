@@ -4,7 +4,11 @@
 
 (function () {
 	"use strict";
-	
+
+	/**
+	 * @param {jQuery} $inputElement
+	 * @constructor
+	 */
 	DrawableCanvas.InputService = function ($inputElement) {
 
 		//<editor-fold name="Variables">

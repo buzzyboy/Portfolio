@@ -164,8 +164,8 @@
 	DrawableCanvas.prototype.centerCanvasInContainer = function () {
 		var $container = this.$canvas.parent();
 		this.$canvas.css({
-			left: Math.max(0, ($container.width() - this.$canvas.outerWidth(true)) / 2),
-			top: Math.max(0, ($container.height() - this.$canvas.outerHeight(true)) / 2)
+			left: Math.max(0, ($container.innerWidth() - this.$canvas.outerWidth(true)) / 2),
+			top: Math.max(0, ($container.innerHeight() - this.$canvas.outerHeight(true)) / 2)
 		});
 	};
 

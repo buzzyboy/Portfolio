@@ -149,10 +149,10 @@ var DrawableCanvas;
 			/**@type {Array<DrawableCanvas.ICollidable>}*/
 			var drawables = [];
 			var collisionRectangle = {
-				x: point.x - 5,
-				y: point.y - 5,
-				width: 10,
-				height: 10
+				x: point.x,
+				y: point.y,
+				width: 1,
+				height: 1
 			};
 			for (var i = 0; i < self._drawables.length; i++)
 			{

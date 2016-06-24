@@ -12,6 +12,7 @@
     <script src="../src/drawables/Drawable.js"></script>
     <script src="../src/drawables/ShapeCollisions.js"></script>
     <script src="../src/drawables/Rectangle.js"></script>
+    <script src="../src/drawables/Circle.js"></script>
     <script src="../src/events/EventEmitter.js"></script>
     <script src="../src/events/EventEnums.js"></script>
     <script src="../src/InputService/InputService.js"></script>
@@ -52,10 +53,11 @@
     var myDrawable = new DrawableCanvas.Rectangle(0, 0, 10, 10, "black");
     myDrawable.filled = true;
     var myDrawable2 = new DrawableCanvas.Rectangle(5, 5, 240, 240, "blue");
+    var myDrawable3 = new DrawableCanvas.Circle(50, 50, 50, "blue");
 
     var $canvasElement = $("#canvasElement");
     var drawableCanvas = new DrawableCanvas($canvasElement, options);
-    drawableCanvas.setDrawables([myDrawable, myDrawable2]);
+    drawableCanvas.setDrawables([myDrawable, myDrawable2, myDrawable3]);
     drawableCanvas.setMediaSize(250, 250);
 
     $(function () {

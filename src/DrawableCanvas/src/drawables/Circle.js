@@ -57,26 +57,25 @@
 	//<editor-fold name="ICollidable">
 
 	DrawableCanvas.Circle.prototype.collidesWithRectangle = function (rect) {
+		var collidesWithCircle = ShapeCollisions.pointEllipse(rect, {
+			x: this.x + this.radius,
+			y: this.y + this.radius,
+			width: this.radius * 2,
+			height: this.radius * 2
+		});
 		if (this.filled === true)
 		{
-			var collisionRectangle = {
-				x: this.x,
-				y: this.y,
-				width: this.width,
-				height: this.height
-			};
-			return ShapeCollisions.rectangleRectangle(rect, collisionRectangle);
+			return collidesWithCircle
 		}
-		else
+		else if (collidesWithCircle === true)
 		{
-			var topRect = {x: this.x, y: this.y, width: this.width, height: 1};
-			var bottomRect = {x: this.x, y: this.y + this.height, width: this.width, height: 1};
-			var rightRect = {x: this.x + this.width, y: this.y, width: 1, height: this.height};
-			var leftRect = {x: this.x, y: this.y, width: 1, height: this.height};
-			return ShapeCollisions.rectangleRectangle(rect, topRect)
-				|| ShapeCollisions.rectangleRectangle(rect, bottomRect)
-				|| ShapeCollisions.rectangleRectangle(rect, leftRect)
-				|| ShapeCollisions.rectangleRectangle(rect, rightRect);
+			var lineWidth = 10;
+			return !ShapeCollisions.pointEllipse(rect, {
+				x: this.x + this.radius + lineWidth,
+				y: this.y + this.radius + lineWidth,
+				width: this.radius * 2 - lineWidth * 2,
+				height: this.radius * 2 - lineWidth * 2
+			});
 		}
 	};
 

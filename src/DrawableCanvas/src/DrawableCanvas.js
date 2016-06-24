@@ -47,6 +47,8 @@ var DrawableCanvas;
 		
 		var isPanning = false;
 		var lastMousePosition = {x: 0, y: 0};
+		/**@type {Array<DrawableCanvas.IDrawable>}*/
+		var selectedDrawables = [];
 		
 		//</editor-fold>
 		
@@ -84,7 +86,12 @@ var DrawableCanvas;
 		}
 		
 		function onInputService_PointerDown (event) {
-			if (self._scalePercent > 1.0)
+			var collisionPoint = convertInputServicePointToCanvasPoint(event.point);
+			selectedDrawables = getDrawablesCollidingWithPoint(collisionPoint);
+			if (selectedDrawables.length > 0)
+			{
+			}
+			else if (self._scalePercent > 1.0)
 			{
 				isPanning = true;
 			}
@@ -92,13 +99,21 @@ var DrawableCanvas;
 		}
 		
 		function onInputService_PointerMove (event) {
+			var translateX = (lastMousePosition.x - event.point.x);
+			var translateY = lastMousePosition.y - event.point.y;
 			if (isPanning === true)
 			{
-				var translateX = (lastMousePosition.x - event.point.x);
-				var translateY = lastMousePosition.y - event.point.y;
 				self.translatePan(translateX, translateY);
 			}
-			else {
+			else if (selectedDrawables.length > 0) {
+				selectedDrawables.forEach(function (d) {
+					d.x -= translateX / self._scaleFactor;
+					d.y -= translateY / self._scaleFactor;
+				});
+				self.render();
+			}
+			else
+			{
 				var collisionPoint = convertInputServicePointToCanvasPoint(event.point);
 				var needsRedraw = false;
 				var collidingDrawables = getDrawablesCollidingWithPoint(collisionPoint);
@@ -111,7 +126,8 @@ var DrawableCanvas;
 					needsRedraw = true;
 				});
 
-				if (needsRedraw === true) {
+				if (needsRedraw === true)
+				{
 					self.render();
 				}
 			}
@@ -122,6 +138,7 @@ var DrawableCanvas;
 			var point = convertInputServicePointToCanvasPoint(event.point);
 			isPanning = false;
 			lastMousePosition = point;
+			selectedDrawables.length = 0;
 		}
 		
 		function onInputService_MouseWheel (event) {
@@ -156,10 +173,12 @@ var DrawableCanvas;
 			};
 			for (var i = 0; i < self._drawables.length; i++)
 			{
-				if (self._drawables[i]["collidesWithRectangle"]) {
+				if (self._drawables[i]["collidesWithRectangle"])
+				{
 					/**@type {DrawableCanvas.ICollidable}}*/
 					var collidable = self._drawables[i];
-					if (collidable["collidesWithRectangle"](collisionRectangle)) {
+					if (collidable["collidesWithRectangle"](collisionRectangle))
+					{
 						drawables.push(collidable);
 					}
 				}

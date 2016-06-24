@@ -16,6 +16,7 @@
 	 * @extends DrawableCanvas.Drawable
 	 * @implements DrawableCanvas.ICollidable
 	 * @constructor
+	 * @module DrawableCanvas.Drawable
 	 */
 	DrawableCanvas.Rectangle = function (x, y, width, height, color) {
 		this.x = x;

@@ -11,6 +11,7 @@
 	 * @constructor
 	 * @abstract
 	 * @implements DrawableCanvas.IDrawable
+	 * @module DrawableCanvas.Drawable
 	 */
 	DrawableCanvas.Drawable = function () {
 	};

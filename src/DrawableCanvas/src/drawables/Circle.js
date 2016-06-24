@@ -42,6 +42,7 @@
 		if (this.filled === true)
 		{
 			context.arc(this.x, this.y, this.radius, 0, 360);
+			context.fill();
 		}
 		else
 		{

@@ -118,8 +118,8 @@
 	 */
 	DrawableCanvas.prototype.getViewportByPercent = function (scalePercent) {
 		var $container = this.$canvas.parent();
-		var containerWidth = $container.innerWidth();
-		var containerHeight = $container.innerHeight();
+		var containerWidth = $container.width();
+		var containerHeight = $container.height();
 		return {
 			width: containerWidth * scalePercent,
 			height: containerHeight * scalePercent
@@ -218,6 +218,7 @@
 	 */
 	DrawableCanvas.prototype.setDrawables = function (drawables) {
 		this._drawables = drawables;
+		this.render();
 	};
 
 	/**

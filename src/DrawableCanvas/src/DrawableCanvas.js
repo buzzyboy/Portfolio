@@ -170,6 +170,19 @@ var DrawableCanvas;
 	//<editor-fold name="Sizing and Scaling">
 
 	/**
+	 * @returns {{x: number, y: number}}
+	 */
+	DrawableCanvas.prototype.getMaxPan = function () {
+		var containerSize = this.getViewportByPercent(1.0);
+		var displayedCanvasSize = this.getViewport(this._scaleFactor);
+		var maxPan = {
+			x: Math.max(0, displayedCanvasSize.width - containerSize.width),
+			y: Math.max(0, displayedCanvasSize.height - containerSize.height)
+		};
+		return maxPan;
+	};
+
+	/**
 	 * @param {Number} x
 	 * @param {Number} y
 	 */
@@ -330,19 +343,6 @@ var DrawableCanvas;
 	 */
 	DrawableCanvas.prototype.setDrawables = function (drawables) {
 		this._drawables = drawables;
-	};
-
-	/**
-	 * @returns {{x: number, y: number}}
-	 */
-	DrawableCanvas.prototype.getMaxPan = function () {
-		var containerSize = this.getViewportByPercent(1.0);
-		var displayedCanvasSize = this.getViewport(this._scaleFactor);
-		var maxPan = {
-			x: Math.max(0, displayedCanvasSize.width - containerSize.width),
-			y: Math.max(0, displayedCanvasSize.height - containerSize.height)
-		};
-		return maxPan;
 	};
 
 	/**

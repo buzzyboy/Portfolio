@@ -4,7 +4,6 @@
 
 (function () {
 	"use strict";
-	debugger;
 
 	if (typeof(angular) !== "undefined") {
 		angular
@@ -17,13 +16,15 @@
 					scope: {
 						"width": "=",
 						"height": "=",
-						"onReady": "@"
+						"onReady": "="
 					},
 					link: function (scope, elem) {
 						var $el = $(elem);
 						var drawableCanvas = new DrawableCanvas($el, {});
-						debugger;
 						drawableCanvas.setMediaSize(scope.width, scope.height);
+						if (scope.onReady) {
+							scope.onReady(drawableCanvas);
+						}
 					}
 				}
 			});

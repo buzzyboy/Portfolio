@@ -41,12 +41,12 @@
 
 		if (this.filled === true)
 		{
-			context.arc(this.x, this.y, this.radius, 0, 360);
+			context.arc(0, 0, this.radius, 0, 2 * Math.PI, false);
 			context.fill();
 		}
 		else
 		{
-			context.arc(this.x, this.y, this.radius, 0, 360);
+			context.arc(0, 0, this.radius, 0, 2 * Math.PI, false);
 			context.stroke();
 		}
 		context.closePath();
@@ -57,26 +57,12 @@
 	//<editor-fold name="ICollidable">
 
 	DrawableCanvas.Circle.prototype.collidesWithRectangle = function (rect) {
-		var collidesWithCircle = ShapeCollisions.pointEllipse(rect, {
-			x: this.x + this.radius,
-			y: this.y + this.radius,
-			width: this.radius * 2,
-			height: this.radius * 2
+		var collidesWithCircle = ShapeCollisions.rectangleCircle(rect, {
+			x: this.x,
+			y: this.y,
+			radius: this.radius
 		});
-		if (this.filled === true)
-		{
-			return collidesWithCircle
-		}
-		else if (collidesWithCircle === true)
-		{
-			var lineWidth = 10;
-			return !ShapeCollisions.pointEllipse(rect, {
-				x: this.x + this.radius + lineWidth,
-				y: this.y + this.radius + lineWidth,
-				width: this.radius * 2 - lineWidth * 2,
-				height: this.radius * 2 - lineWidth * 2
-			});
-		}
+		return collidesWithCircle;
 	};
 
 	//</editor-fold>

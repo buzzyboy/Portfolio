@@ -16,6 +16,9 @@
 	DrawableCanvas.Drawable = function () {
 	};
 
+	/**
+	 * Note: Use 0, 0 as center. DrawableCanvas rendering will automatically translate drawables
+	 */
 	DrawableCanvas.Drawable.prototype.draw = function () {
 		console.warn("Not implemented");
 	};

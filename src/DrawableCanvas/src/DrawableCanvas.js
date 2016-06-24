@@ -72,6 +72,16 @@ var DrawableCanvas;
 		//</editor-fold>
 		
 		//<editor-fold name="Input Service">
+
+		/**
+		 * @param {{x:Number, y:Number}} point
+		 */
+		function convertInputServicePointToCanvasPoint (point) {
+			return {
+				x: point.x + parseInt($canvasElement[0].style.left),
+				y: point.y + parseInt($canvasElement[0].style.top)
+			};
+		}
 		
 		function onInputService_PointerDown (event) {
 			if (self._scalePercent > 1.0)
@@ -85,18 +95,20 @@ var DrawableCanvas;
 		}
 		
 		function onInputService_PointerMove (event) {
+			var point = convertInputServicePointToCanvasPoint(event.point);
 			if (isPanning === true)
 			{
-				var translateX = lastMousePosition.x - event.point.x;
-				var translateY = lastMousePosition.y - event.point.y;
+				var translateX = lastMousePosition.x - point.x;
+				var translateY = lastMousePosition.y - point.y;
 				self.translatePan(translateX, translateY);
 			}
-			lastMousePosition = event.point;
+			lastMousePosition = point;
 		}
 		
 		function onInputService_PointerUp (event) {
+			var point = convertInputServicePointToCanvasPoint(event.point);
 			isPanning = false;
-			lastMousePosition = event.point;
+			lastMousePosition = point;
 		}
 		
 		function onInputService_MouseWheel (event) {

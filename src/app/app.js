@@ -6,7 +6,8 @@
 	"use strict";
 	
 	angular.module('CodyPortfolio', [
-		'ui.router'
+		'ui.router',
+		'DrawableCanvas'
 	]);
 
 })();

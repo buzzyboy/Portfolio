@@ -4,6 +4,7 @@
 
 var drawableCanvasSourceFiles = [
 	"src/DrawableCanvas/src/DrawableCanvas.js",
+	"src/DrawableCanvas/src/API.js",
 	"src/DrawableCanvas/src/InputService/*/js",
 	"src/DrawableCanvas/src/events/*.js",
 	"src/DrawableCanvas/src/drawables/*.js"

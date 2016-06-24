@@ -8,7 +8,10 @@ var drawableCanvasSourceFiles = [
 	"src/DrawableCanvas/src/API.js",
 	"src/DrawableCanvas/src/InputService/*.js",
 	"src/DrawableCanvas/src/events/*.js",
-	"src/DrawableCanvas/src/drawables/*.js",
+	"src/DrawableCanvas/src/drawables/ShapeCollisions.js",
+	"src/DrawableCanvas/src/drawables/Drawable.js",
+	"src/DrawableCanvas/src/drawables/Rectangle.js",
+	"src/DrawableCanvas/src/drawables/Circle.js",
 	"src/DrawableCanvas/src/angular/**/*.js"
 ];
 

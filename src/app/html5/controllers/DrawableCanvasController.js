@@ -31,7 +31,7 @@
 		 */
 		function onDrawableCanvasReady (drawableCanvas) {
 			var rect = new DrawableCanvas.Rectangle(5, 5, 240, 240, "red");
-			var circle = new DrawableCanvas.Circle(125/2, 125/2, 125, "blue");
+			var circle = new DrawableCanvas.Circle(25, 25, 25, "blue");
 			circle.filled = true;
 			drawableCanvas.setDrawables([rect, circle]);
 		}

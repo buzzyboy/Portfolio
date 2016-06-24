@@ -35,7 +35,7 @@
 			url: "/html5",
 			views: {
 				"main@": {
-					templateUrl: "app/home/home.html"
+					templateUrl: "app/html5/html5.html"
 				},
 				"navbar@html5": {
 					templateUrl: "app/navbar/navbar.html"

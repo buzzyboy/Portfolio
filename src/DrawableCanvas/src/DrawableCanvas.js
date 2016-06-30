@@ -96,6 +96,7 @@ var DrawableCanvas;
 				isPanning = true;
 			}
 			lastMousePosition = event.point;
+			self._eventEmitter.emitMouseDownEvent(collisionPoint.x, collisionPoint.y, selectedDrawables);
 		}
 		
 		function onInputService_PointerMove (event) {
@@ -145,6 +146,7 @@ var DrawableCanvas;
 			var point = convertInputServicePointToCanvasPoint(event.point);
 			isPanning = false;
 			lastMousePosition = point;
+			self._eventEmitter.emitMouseUpEvent(point.x, point.y, selectedDrawables);
 			selectedDrawables.length = 0;
 		}
 		

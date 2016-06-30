@@ -12,5 +12,7 @@ DrawableCanvas.Events = {
 	rendered: "dc.rendered",
 	drawableMouseEnter: "dc.drawableMouseEnter",
 	drawableMouseLeave: "dc.drawableMouseLeave",
-	drawableMoved: "dc.drawableMoved"
+	drawableMoved: "dc.drawableMoved",
+	mouseDown: "dc.mouseDown",
+	mouseUp: "dc.mouseUp"
 };

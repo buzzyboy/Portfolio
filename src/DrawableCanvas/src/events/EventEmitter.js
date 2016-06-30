@@ -21,6 +21,8 @@
 		emitRenderedEvent: function () {
 			this.emitEvent(DrawableCanvas.Events.rendered);
 		},
+		//<editor-fold name="Drawable">
+
 		/**
 		 * @param {DrawableCanvas.Drawable} drawable
 		 * @param {Number} canvasX
@@ -46,6 +48,29 @@
 				canvasY: canvasY
 			});
 			this.emitEvent(event);
+		},
+		//</editor-fold>
+
+		//<editor-fold name="Mouse">
+
+		emitMouseUpEvent: function (canvasX, canvasY, selectedDrawbles) {
+			var event = $.Event(DrawableCanvas.Events.mouseUp, {
+				canvasX: canvasX,
+				canvasY: canvasY,
+				drawables: selectedDrawbles
+			});
+			this.emitEvent(event);
+		},
+		emitMouseDownEvent: function (canvasX, canvasY, selectedDrawbles) {
+			var event = $.Event(DrawableCanvas.Events.mouseDown, {
+				canvasX: canvasX,
+				canvasY: canvasY,
+				drawables: selectedDrawbles
+			});
+			this.emitEvent(event);
 		}
+
+		//</editor-fold>
+
 	};
 })();

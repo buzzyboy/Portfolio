@@ -9,5 +9,8 @@
  * @readonly
  */
 DrawableCanvas.Events = {
-	rendered: "rendered"
+	rendered: "dc.rendered",
+	drawableMouseEnter: "dc.drawableMouseEnter",
+	drawableMouseLeave: "dc.drawableMouseLeave",
+	drawableMoved: "dc.drawableMoved"
 };

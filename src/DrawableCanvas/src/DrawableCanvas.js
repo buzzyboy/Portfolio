@@ -105,7 +105,8 @@ var DrawableCanvas;
 			{
 				self.translatePan(translateX, translateY);
 			}
-			else if (selectedDrawables.length > 0) {
+			else if (selectedDrawables.length > 0)
+			{
 				selectedDrawables.forEach(function (d) {
 					d.x -= translateX / self._scaleFactor;
 					d.y -= translateY / self._scaleFactor;
@@ -117,14 +118,20 @@ var DrawableCanvas;
 				var collisionPoint = convertInputServicePointToCanvasPoint(event.point);
 				var needsRedraw = false;
 				var collidingDrawables = getDrawablesCollidingWithPoint(collisionPoint);
-				self._drawables.filter(function (d) { return d.highlighted === true; }).forEach(function (drawable) {
-					drawable.highlighted = false;
-					needsRedraw = true;
-				});
-				collidingDrawables.forEach(function (drawable) {
-					drawable.highlighted = true;
-					needsRedraw = true;
-				});
+				self._drawables
+					.filter(function (d) { return d.highlighted === true; })
+					.forEach(function (drawable) {
+						drawable.highlighted = false;
+						needsRedraw = true;
+						self._eventEmitter.emitDrawableMouseLeaveEvent(drawable, collisionPoint.x, collisionPoint.y);
+					});
+				collidingDrawables
+					.filter(function (d) { return d.highlighted === false; })
+					.forEach(function (drawable) {
+						drawable.highlighted = true;
+						needsRedraw = true;
+						self._eventEmitter.emitDrawableMouseEnterEvent(drawable, collisionPoint.x, collisionPoint.y);
+					});
 
 				if (needsRedraw === true)
 				{
